@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -37,5 +38,35 @@ public class PostTest {
         Post otherPost = new Post ("How to pair successfully");
         assertTrue(Post.getAll().contains(post));
         assertTrue(Post.getAll().contains(otherPost));
+    }
+    @Test
+    public void getPublished_isFalseAfterInstantiation_false() throws Exception{
+        Post post = new Post("Day 1: Intro");
+        assertEquals(false,post.getPublished());
+    }
+    @Test
+    public void getCreatedAt_instantiatesWithCurrentTime_today() throws Exception {
+       Post post = setupNewPost();
+       assertEquals(LocalDateTime.now().getDayOfWeek(), post.getCreatedAt().getDayOfWeek());
+    }
+    public Post setupNewPost(){
+        return new Post("Day 1: Intro");
+    }
+    @Test
+    public void getId_postsInstantiateWithAnId_1() throws Exception {
+        Post.clearAllPost();
+        Post post = new Post("Day 1: Intro");
+        assertEquals(1,post.getId());
+    }
+    @Test
+    public void findReturnsCorrectPost() throws Exception {
+        Post post = setupNewPost();
+        assertEquals(1,Post.findById(post.getId()).getId());
+    }
+    @Test
+    public void findReturnsCorrectPostWhenMoreThanOnePostExists() throws Exception {
+        Post post = setupNewPost();
+        Post otherPost = new Post("How to pair successfully");
+        assertEquals(2, Post.findById(otherPost.getId()).getId());
     }
 }
